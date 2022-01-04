@@ -1,0 +1,81 @@
+version: "3.9"
+
+services:
+
+    internal_data_api:
+        build: 
+            context: ./internal_data_api
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        # ports:
+        #     - "8000:80"
+        volumes: 
+            - ./files:/files
+        environment: 
+            - DB_FOLDER=/files
+
+    backend:
+        build: 
+            context: ./backend
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        ports:
+            - "5000:5000"
+        volumes: 
+            - ./files:/files
+            - ./backend:/backend
+        environment: 
+            - DB_FOLDER=/files
+            - JWT_SECRET=<jwt-secret>
+            - DATA_API_BASE_ADDRESS=http://internal_data_api
+        depends_on: 
+            - internal_data_api
+
+    frontend:
+        build: 
+            context: ./frontend
+            dockerfile: Dockerfile
+            args:
+                BACKEND_API_URL_ARG: "http://localhost:5000"
+        restart: unless-stopped
+        ports:
+            - "3000:3000"
+        depends_on:
+            - backend
+
+    playlist_watcher:
+        build: 
+            context: ./playlist_watcher
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        volumes: 
+            - ./playlist_watcher:/playlist_watcher
+        environment: 
+            - RABBITMQ_BROKER_URI=pyamqp://guest@rabbitmqhost//
+            - YOUTUBE_API_KEY=<your-youtube-api-key>
+            - DATA_API_BASE_ADDRESS=http://internal_data_api
+            - YT_QUERY_INTERVAL_SECONDS=300
+        depends_on: 
+            - backend
+
+    worker:
+        build: 
+            context: ./worker
+            dockerfile: Dockerfile
+        restart: always
+        volumes: 
+            - ./files:/files
+            - ./worker:/worker
+        environment: 
+            - RABBITMQ_BROKER_URI=pyamqp://guest@rabbitmqhost//
+            - DATA_API_BASE_ADDRESS=http://internal_data_api
+        depends_on:
+            - backend
+            - rabbitmqhost
+
+    rabbitmqhost:
+        image: rabbitmq:3-management
+        restart: always
+        ports:
+            - "5672:5672"
+            - "15672:15672"

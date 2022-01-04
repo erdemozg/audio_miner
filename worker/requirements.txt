@@ -1,0 +1,4 @@
+celery==5.0.5
+dropbox==11.19.0
+requests==2.25.1
+youtube-dl==2021.12.17
