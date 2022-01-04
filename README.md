@@ -2,6 +2,11 @@
 
 Save a video to your (public) youtube playlist and its audio will end up in your dropbox.
 
+<p float="left">
+  <img src="https://raw.githubusercontent.com/everlost/audio_miner/main/screenshots/1-home.PNG" alt="screenshot" width="200"/>
+  <img src="https://raw.githubusercontent.com/everlost/audio_miner/main/screenshots/2-profile.PNG" alt="screenshot" width="200"/> 
+</p>
+
 
 ## How To Run
 
