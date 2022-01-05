@@ -11,7 +11,7 @@ using internal_data_api.Context;
 namespace internal_data_api.Migrations
 {
     [DbContext(typeof(AudioMinerContext))]
-    [Migration("20211227200122_InitialCreate")]
+    [Migration("20220104200859_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -105,8 +105,6 @@ namespace internal_data_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlaylistId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("MediaItems");
@@ -122,6 +120,9 @@ namespace internal_data_api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DropboxToken")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SyncError")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -172,17 +173,11 @@ namespace internal_data_api.Migrations
 
             modelBuilder.Entity("internal_data_api.Context.Entites.MediaItem", b =>
                 {
-                    b.HasOne("internal_data_api.Context.Entites.Playlist", "Playlist")
-                        .WithMany()
-                        .HasForeignKey("PlaylistId");
-
                     b.HasOne("internal_data_api.Context.Entites.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Playlist");
 
                     b.Navigation("User");
                 });

@@ -52,11 +52,12 @@ services:
             - ./playlist_watcher:/playlist_watcher
         environment: 
             - RABBITMQ_BROKER_URI=pyamqp://guest@rabbitmqhost//
-            - YOUTUBE_API_KEY=<your-youtube-api-key>
             - DATA_API_BASE_ADDRESS=http://internal_data_api
+            - YOUTUBE_API_KEY=<your-youtube-api-key>
             - YT_QUERY_INTERVAL_SECONDS=300
         depends_on: 
-            - backend
+            - internal_data_api
+            - rabbitmqhost
 
     worker:
         build: 
@@ -70,7 +71,7 @@ services:
             - RABBITMQ_BROKER_URI=pyamqp://guest@rabbitmqhost//
             - DATA_API_BASE_ADDRESS=http://internal_data_api
         depends_on:
-            - backend
+            - internal_data_api
             - rabbitmqhost
 
     rabbitmqhost:

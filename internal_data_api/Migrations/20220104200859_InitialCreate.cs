@@ -42,30 +42,6 @@ namespace internal_data_api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Playlists",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    YtPlaylistId = table.Column<string>(type: "TEXT", nullable: false),
-                    YtPlaylistName = table.Column<string>(type: "TEXT", nullable: false),
-                    DropboxToken = table.Column<string>(type: "TEXT", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Playlists", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Playlists_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "MediaItems",
                 columns: table => new
                 {
@@ -93,11 +69,6 @@ namespace internal_data_api.Migrations
                 {
                     table.PrimaryKey("PK_MediaItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MediaItems_Playlists_PlaylistId",
-                        column: x => x.PlaylistId,
-                        principalTable: "Playlists",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_MediaItems_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
@@ -105,10 +76,30 @@ namespace internal_data_api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_MediaItems_PlaylistId",
-                table: "MediaItems",
-                column: "PlaylistId");
+            migrationBuilder.CreateTable(
+                name: "Playlists",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    YtPlaylistId = table.Column<string>(type: "TEXT", nullable: false),
+                    YtPlaylistName = table.Column<string>(type: "TEXT", nullable: false),
+                    DropboxToken = table.Column<string>(type: "TEXT", nullable: true),
+                    SyncError = table.Column<string>(type: "TEXT", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Playlists", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Playlists_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_MediaItems_UserId",

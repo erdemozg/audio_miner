@@ -84,13 +84,16 @@ def get_playlists_by_yt_playlist_id(yt_playlist_id):
     return return_value
 
 def add_playlist(playlist):
-    make_request("post", f"/api/playlists", json=playlist)
+    response_ok, _ = make_request("post", f"/api/playlists", json=playlist)
+    return response_ok
     
 def update_playlist(playlist):
-    make_request("put", f"/api/playlists", json=playlist)
+    response_ok, _ = make_request("put", f"/api/playlists", json=playlist)
+    return response_ok
     
 def delete_playlist(id):
-    make_request("delete", f"/api/playlists/{id}")
+    response_ok, _ = make_request("delete", f"/api/playlists/{id}")
+    return response_ok
 
 ### media items
 

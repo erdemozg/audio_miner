@@ -103,8 +103,6 @@ namespace internal_data_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlaylistId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("MediaItems");
@@ -120,6 +118,9 @@ namespace internal_data_api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DropboxToken")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SyncError")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -170,17 +171,11 @@ namespace internal_data_api.Migrations
 
             modelBuilder.Entity("internal_data_api.Context.Entites.MediaItem", b =>
                 {
-                    b.HasOne("internal_data_api.Context.Entites.Playlist", "Playlist")
-                        .WithMany()
-                        .HasForeignKey("PlaylistId");
-
                     b.HasOne("internal_data_api.Context.Entites.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Playlist");
 
                     b.Navigation("User");
                 });

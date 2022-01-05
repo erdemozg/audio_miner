@@ -71,7 +71,7 @@ Nevertheless I'd like to add these features:
 
 I had trouble running rabbitmq docker container on my raspberry pi (clock_gettime error).
 
-I fixed it with these command:
+I fixed it with these commands:
 
 `wget http://ftp.us.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.4.4-1~bpo10+1_armhf.deb`
 

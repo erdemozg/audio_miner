@@ -40,7 +40,4 @@ public class MediaItem
 
     
     public User User { get; set; }
-
-    public Playlist Playlist { get; set; }
-
 }

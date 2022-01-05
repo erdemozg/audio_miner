@@ -52,6 +52,16 @@ def custom403(error):
 
 
 """
+jsonify 500 responses and include error message.
+"""
+@app.errorhandler(500)
+def custom500(error):
+    response = jsonify({"ok": False, "message": error.description})
+    response.status_code = 500
+    return response
+
+
+"""
 file download
 """
 @app.route('/files/<folder_name>/<file_name>')
@@ -195,8 +205,8 @@ api endpoint for fetching user's playlists.
 @app.route("/user_playlists", methods=["GET"])
 @authenticate
 def get_user_playlists(user_id):
-    user = business.get_user_playlists(user_id)
-    return jsonify(user)
+    ret = business.get_user_playlists(user_id)
+    return jsonify(ret)
 
 
 """
@@ -217,7 +227,7 @@ def add_user_playlist(user_id):
             if ok:
                 return jsonify({"ok": True})
             else:
-                abort(400, message)
+                abort(400, message if len(message) > 0 else "Something went wrong!")
         else:
             abort(400, "bad_request")
     else:
@@ -233,7 +243,7 @@ def update_user_playlist(user_id):
     playlist_info = request.get_json()
     if playlist_info:
         if playlist_info["id"] != None and len(playlist_info["yt_playlist_id"]) > 0 and len(playlist_info["yt_playlist_name"]):
-            ok, message = business.update_user_playlist(
+            ok = business.update_user_playlist(
                 playlist_info["id"],
                 playlist_info["yt_playlist_id"],
                 playlist_info["yt_playlist_name"],
@@ -242,7 +252,7 @@ def update_user_playlist(user_id):
             if ok:
                 return jsonify({"ok": True})
             else:
-                abort(400, message)
+                abort(500, "Something went wrong!")
         else:
             abort(400, "bad_request")
     else:
@@ -255,15 +265,21 @@ api endpoint for deleting user playlist.
 @app.route("/user_playlists/<playlist_id>", methods=["DELETE"])
 @authenticate
 def delete_user_playlist(user_id, playlist_id):
-    business.delete_user_playlist(playlist_id)
-    return jsonify({"ok": True})
+    ok = business.delete_user_playlist(playlist_id)
+    if ok:
+        return jsonify({"ok": True})
+    else:
+        abort(500, "Something went wrong!")
 
 
 @app.route('/mediaitems/<item_guid>', methods=["DELETE"])
 @authenticate
 def delete_media_item(user_id, item_guid):
-    ret = business.delete_media_item(user_id, item_guid)
-    return jsonify({"ok": ret})
+    ok = business.delete_media_item(user_id, item_guid)
+    if ok:
+        return jsonify({"ok": True})
+    else:
+        abort(500, "Something went wrong!")
 
 
 if __name__ == '__main__':

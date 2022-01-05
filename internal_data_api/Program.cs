@@ -1,4 +1,5 @@
 using internal_data_api.Context;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,9 @@ app.MapControllers();
 using (var serviceScope = app.Services.CreateScope())
 {
     var context = serviceScope.ServiceProvider.GetRequiredService<AudioMinerContext>();
-    context.Database.EnsureCreated();
+    if (context.Database.GetPendingMigrations().Any()) {
+        context.Database.Migrate();
+    }
 }
 
 app.Run();

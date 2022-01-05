@@ -102,31 +102,31 @@ def add_user_playlist(user_id, yt_playlist_id, yt_playlist_name, dropbox_token):
     if existing_data:
         return False, "playlist_id_exists"
 
-    data_api_client.add_playlist({
+    ret = data_api_client.add_playlist({
         "user_id": user_id,
         "yt_playlist_id": yt_playlist_id,
         "yt_playlist_name": yt_playlist_name,
         "dropbox_token": dropbox_token
     })
 
-    return True, None
+    return ret, ""
 
 
 """
 update_user_playlist
 """
 def update_user_playlist(id, yt_playlist_id, yt_playlist_name, dropbox_token):
-    data_api_client.update_playlist({
+    ret = data_api_client.update_playlist({
         "id": id,
         "yt_playlist_id": yt_playlist_id,
         "yt_playlist_name": yt_playlist_name,
         "dropbox_token": dropbox_token
     })
-    return True, None
+    return ret
 
 
 """
 delete user playlist
 """
 def delete_user_playlist(playlist_id):
-    data_api_client.delete_playlist(playlist_id)
+    return data_api_client.delete_playlist(playlist_id)

@@ -77,7 +77,7 @@ public class MediaItemQuery
                 (mediaItem, user) => new {
                     Id = mediaItem.Id,
                     UserId = mediaItem.UserId,
-                    Username = mediaItem.User != null ? mediaItem.User.Username : "",
+                    Username = user != null ? user.Username : "",
                     PlaylistId = mediaItem.PlaylistId,
                     YtPlaylistId = mediaItem.YtPlaylistId,
                     YtPlaylistItemId = mediaItem.YtPlaylistItemId,

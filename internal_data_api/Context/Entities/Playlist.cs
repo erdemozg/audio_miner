@@ -18,6 +18,6 @@ public class Playlist
 
     public DateTime? UpdatedAt { get; set; }
 
-    
+
     public User User { get; set; }
 }
